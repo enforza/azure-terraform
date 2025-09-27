@@ -200,7 +200,7 @@ After deployment, Terraform provides useful information:
 
 ## 📚 Additional Resources
 
-- [Enforza Documentation](https://docs.enforza.com)
+- [Enforza Documentation](https://docs.enforza.io)
 - [Azure Terraform Provider](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
 - [Azure Architecture Center](https://docs.microsoft.com/en-us/azure/architecture/)
 
