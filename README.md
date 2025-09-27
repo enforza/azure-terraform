@@ -136,6 +136,8 @@ Private Subnet Resources
 | Public IPs | 1 | 2 | 3 + DNS |
 | Monthly Cost | ~$30 | ~$70 | ~$90 |
 
+**+ Enforza Gateway license costs**
+
 ## 🧪 Testing
 
 The `ha-multi-az-with-dnat` deployment includes a test VM for DNAT validation:
