@@ -1,0 +1,156 @@
+#cloud-config
+package_update: true
+package_upgrade: false
+
+packages:
+  - nginx
+  - curl
+  - net-tools
+  - ufw
+
+write_files:
+  - path: /var/www/html/index.html
+    content: |
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Enforza DNAT Test</title>
+          <style>
+              body {
+                  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  color: white;
+                  margin: 0;
+                  padding: 20px;
+                  min-height: 100vh;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+              }
+              .container {
+                  background: rgba(255, 255, 255, 0.1);
+                  backdrop-filter: blur(10px);
+                  border-radius: 20px;
+                  padding: 40px;
+                  text-align: center;
+                  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+                  border: 1px solid rgba(255, 255, 255, 0.18);
+                  max-width: 800px;
+              }
+              h1 {
+                  font-size: 3em;
+                  margin-bottom: 20px;
+                  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+              }
+              .status {
+                  font-size: 1.5em;
+                  margin: 20px 0;
+                  padding: 15px;
+                  background: rgba(76, 175, 80, 0.3);
+                  border-radius: 10px;
+                  border: 1px solid #4CAF50;
+              }
+              .info-box {
+                  background: rgba(255, 255, 255, 0.1);
+                  border-radius: 10px;
+                  padding: 20px;
+                  margin: 20px 0;
+                  text-align: left;
+              }
+              .info-row {
+                  display: flex;
+                  justify-content: space-between;
+                  margin: 10px 0;
+                  padding: 8px;
+                  background: rgba(255, 255, 255, 0.05);
+                  border-radius: 5px;
+              }
+              .label {
+                  font-weight: bold;
+                  color: #FFD700;
+              }
+              .value {
+                  font-family: 'Courier New', monospace;
+                  background: rgba(0, 0, 0, 0.3);
+                  padding: 2px 8px;
+                  border-radius: 3px;
+              }
+              .footer {
+                  margin-top: 30px;
+                  font-size: 0.9em;
+                  opacity: 0.8;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="container">
+              <h1>🔒 Enforza DNAT Test</h1>
+              
+              <div class="status">
+                  ✅ DNAT Working - You've reached the private test VM!
+              </div>
+              
+              <div class="info-box">
+                  <h3>🌐 Network Information</h3>
+                  <div class="info-row">
+                      <span class="label">External Load Balancer FQDN:</span>
+                      <span class="value">${external_lb_fqdn}</span>
+                  </div>
+                  <div class="info-row">
+                      <span class="label">External Load Balancer IP:</span>
+                      <span class="value">${external_lb_ip}</span>
+                  </div>
+                  <div class="info-row">
+                      <span class="label">Test VM Private IP:</span>
+                      <span class="value">${test_vm_ip}</span>
+                  </div>
+                  <div class="info-row">
+                      <span class="label">Test VM Subnet:</span>
+                      <span class="value">Private Subnet 1 (10.0.10.0/24)</span>
+                  </div>
+              </div>
+              
+              <div class="info-box">
+                  <h3>🔄 DNAT Flow</h3>
+                  <p>Your request traveled:</p>
+                  <p><strong>Internet</strong> → <strong>External Load Balancer</strong> → <strong>Enforza Gateway</strong> → <strong>This Test VM</strong></p>
+                  <p>The Enforza gateway performed DNAT to route your traffic to this private VM!</p>
+              </div>
+              
+              <div class="info-box">
+                  <h3>🧪 Test Instructions</h3>
+                  <p>To test DNAT functionality:</p>
+                  <ol style="text-align: left;">
+                      <li>Configure Enforza gateway to DNAT traffic to <code>${test_vm_ip}:80</code></li>
+                      <li>Access via external LB: <code>http://${external_lb_fqdn}</code></li>
+                      <li>If you see this page, DNAT is working correctly!</li>
+                  </ol>
+              </div>
+              
+              <div class="footer">
+                  <p>🕒 Page loaded at: <span id="timestamp"></span></p>
+                  <p>Nginx running on Ubuntu 22.04 LTS</p>
+              </div>
+          </div>
+          
+          <script>
+              document.getElementById('timestamp').textContent = new Date().toLocaleString();
+          </script>
+      </body>
+      </html>
+    permissions: "0644"
+
+runcmd:
+  - apt-get update
+  - apt-get install -y nginx
+  - systemctl enable nginx
+  - systemctl start nginx
+  - systemctl status nginx
+  - echo "Test VM setup complete - Nginx running on port 80"
+  - echo "VM IP: ${test_vm_ip}"
+  - echo "External LB: ${external_lb_fqdn} (${external_lb_ip})"
+
+final_message: "Enforza DNAT Test VM setup complete!"
