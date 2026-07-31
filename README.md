@@ -1,3 +1,18 @@
+> ## This repository has moved
+>
+> The Azure templates now live in **[enforza/landing-zones](https://github.com/enforza/landing-zones)**,
+> alongside the AWS patterns, and have been updated to the current registration
+> contract.
+>
+> **Do not use the templates in this repository.** They bootstrap with a legacy
+> install command (`go.efz.io/install --companyId=...`) that the current Enforza
+> platform no longer accepts. Deployments will fail to register.
+>
+> Current Azure patterns:
+> [simple-single-az](https://github.com/enforza/landing-zones/tree/main/azure/simple-single-az) ·
+> [ha-multi-az](https://github.com/enforza/landing-zones/tree/main/azure/ha-multi-az) ·
+> [ha-multi-az-with-dnat](https://github.com/enforza/landing-zones/tree/main/azure/ha-multi-az-with-dnat)
+
 # Azure Terraform Templates for Enforza Gateway
 
 This repository contains production-ready Terraform templates for deploying Enforza Gateway infrastructure on Microsoft Azure.
